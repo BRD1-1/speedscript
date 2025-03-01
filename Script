@@ -42,8 +42,8 @@ local Toggle = MainTab:CreateToggle({
    CurrentValue = false,
    Flag = "Toggle1",
    Callback = function(Farming) 
+      local speed = 0
       if Farming then
-         local speed = 0
          game:GetService("ReplicatedStorage").Remotes.Rebirth2:FireServer()
          while Farming do
              if speed < 500 then
