@@ -37,28 +37,28 @@ local Window = Rayfield:CreateWindow({
 local MainTab = Window:CreateTab("Auto Farm", nil)
 local MainSection = MainTab:CreateSection("Auto Farm")
 
+
 local Toggle = MainTab:CreateToggle({ 
    Name = "Auto Farm", 
    CurrentValue = false,
    Flag = "Toggle1",
    Callback = function(Farming) 
-      local speed = 0
-      game:GetService("ReplicatedStorage").Remotes.Rebirth2:FireServer()
-
-      -- Run the farming loop only when the toggle is enabled
-      while true do
-         if Farming then
-            if speed < 500 then
-               game:GetService("ReplicatedStorage").Remotes.Click:FireServer()
-               speed = speed + 1
-            else
-               game:GetService("ReplicatedStorage").Remotes.Rebirth2:FireServer()
-               speed = 0
-            end
-         else
-            break 
+      if Farming then
+         isActive = 1  -- Turn on the script
+         local speed = 0
+         game:GetService("ReplicatedStorage").Remotes.Rebirth2:FireServer()
+         while isActive == 1 do
+             if speed < 500 then
+                 game:GetService("ReplicatedStorage").Remotes.Click:FireServer()
+                 speed = speed + 1
+             else
+                 game:GetService("ReplicatedStorage").Remotes.Rebirth2:FireServer()
+                 speed = 0
+             end
+             task.wait()
          end
-         task.wait(0.1) 
+      else
+         isActive = 0  -- Turn off the script
       end
    end,
 })
