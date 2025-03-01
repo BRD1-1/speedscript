@@ -34,20 +34,18 @@ local Window = Rayfield:CreateWindow({
    }
 })
 
-
 local MainTab = Window:CreateTab("Auto Farm", nil)
-local MainSection = Tab:CreateSection("Auto Farm")
-
+local MainSection = MainTab:CreateSection("Auto Farm")
 
 local Toggle = MainTab:CreateToggle({ 
    Name = "Auto Farm", 
    CurrentValue = false,
    Flag = "Toggle1",
-   Callback = function(Value) 
-      if Value then
+   Callback = function(Farming) 
+      if Farming then
          local speed = 0
          game:GetService("ReplicatedStorage").Remotes.Rebirth2:FireServer()
-         while Value do
+         while Farming do
              if speed < 500 then
                  game:GetService("ReplicatedStorage").Remotes.Click:FireServer()
                  speed = speed + 1
@@ -60,3 +58,4 @@ local Toggle = MainTab:CreateToggle({
       end
    end,
 })
+
