@@ -58,4 +58,3 @@ local Toggle = MainTab:CreateToggle({
       end
    end,
 })
-
