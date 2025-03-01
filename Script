@@ -44,17 +44,21 @@ local Toggle = MainTab:CreateToggle({
    Callback = function(Farming) 
       local speed = 0
       game:GetService("ReplicatedStorage").Remotes.Rebirth2:FireServer()
-      
-      while Farming do
-         if speed < 500 then
-            game:GetService("ReplicatedStorage").Remotes.Click:FireServer()
-            speed = speed + 1
+
+      -- Run the farming loop only when the toggle is enabled
+      while true do
+         if Farming then
+            if speed < 500 then
+               game:GetService("ReplicatedStorage").Remotes.Click:FireServer()
+               speed = speed + 1
+            else
+               game:GetService("ReplicatedStorage").Remotes.Rebirth2:FireServer()
+               speed = 0
+            end
          else
-            game:GetService("ReplicatedStorage").Remotes.Rebirth2:FireServer()
-            speed = 0
+            break 
          end
-         task.wait(0.1) -- Short delay to check the toggle state more frequently
+         task.wait(0.1) 
       end
    end,
 })
-
