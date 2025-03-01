@@ -39,11 +39,11 @@ local MainTab = Window:CreateTab("Auto Farm", nil)
 local MainSection = Tab:CreateSection("Auto Farm")
 
 
-local Toggle = MainTab:CreateToggle({
-   Name = "Auto Farm",
+local Toggle = MainTab:CreateToggle({ 
+   Name = "Auto Farm", 
    CurrentValue = false,
-   Flag = "AutoFarmToggle",
-   Callback = function(Value)
+   Flag = "Toggle1",
+   Callback = function(Value) 
       if Value then
          local speed = 0
          game:GetService("ReplicatedStorage").Remotes.Rebirth2:FireServer()
@@ -58,5 +58,5 @@ local Toggle = MainTab:CreateToggle({
              task.wait()
          end
       end
-   end
+   end,
 })
