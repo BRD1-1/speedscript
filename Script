@@ -62,3 +62,56 @@ local Toggle = MainTab:CreateToggle({
       end
    end,
 })
+
+
+local MiscTab = Window:CreateTab("Misc", nil)
+local MainSection = MiscTab:CreateSection("Misc")
+
+local Player = game.Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
+local RootPart = Character:WaitForChild("HumanoidRootPart")
+local Camera = game.Workspace.CurrentCamera
+
+local flying = false
+local speed = 50
+local bodyVelocity
+
+local Toggle = MiscTab:CreateToggle({
+   Name = "Fly",
+   CurrentValue = false,
+   Flag = "ftoggle", 
+   Callback = function(Fly)
+      if Fly then
+         flying = true
+         bodyVelocity = Instance.new("BodyVelocity")
+         bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)
+         bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+         bodyVelocity.Parent = RootPart
+
+         game:GetService("UserInputService").InputChanged:Connect(function(input, gameProcessedEvent)
+            if flying and not gameProcessedEvent then
+               local moveDirection = Vector3.new(0, 0, 0)
+
+               if input.UserInputType == Enum.UserInputType.Keyboard then
+                  if input.KeyCode == Enum.KeyCode.W then
+                     moveDirection = moveDirection + Camera.CFrame.LookVector
+                  elseif input.KeyCode == Enum.KeyCode.S then
+                     moveDirection = moveDirection - Camera.CFrame.LookVector
+                  elseif input.KeyCode == Enum.KeyCode.A then
+                     moveDirection = moveDirection - Camera.CFrame.RightVector
+                  elseif input.KeyCode == Enum.KeyCode.D then
+                     moveDirection = moveDirection + Camera.CFrame.RightVector
+                  end
+                  bodyVelocity.Velocity = moveDirection * speed
+               end
+            end
+         end)
+      else
+         flying = false
+         if bodyVelocity then
+            bodyVelocity:Destroy()
+         end
+      end
+   end,
+})
