@@ -89,7 +89,11 @@ local Toggle = MiscTab:CreateToggle({
          bodyVelocity.Velocity = Vector3.new(0, 0, 0)
          bodyVelocity.Parent = RootPart
 
-         game:GetService("UserInputService").InputChanged:Connect(function(input, gameProcessedEvent)
+         local userInputService = game:GetService("UserInputService")
+         local touchInput = Vector2.new(0, 0)
+         
+         -- Keyboard and Touch input handler
+         local function handleInput(input, gameProcessedEvent)
             if flying and not gameProcessedEvent then
                local moveDirection = Vector3.new(0, 0, 0)
 
@@ -103,16 +107,21 @@ local Toggle = MiscTab:CreateToggle({
                   elseif input.KeyCode == Enum.KeyCode.D then
                      moveDirection = moveDirection + Camera.CFrame.RightVector
                   end
-                  bodyVelocity.Velocity = moveDirection * speed
                elseif input.UserInputType == Enum.UserInputType.Touch then
                   local touchPos = input.Position
                   local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-                  local direction = (touchPos - screenCenter).Unit
-                  moveDirection = Vector3.new(direction.X, 0, direction.Y)
-                  bodyVelocity.Velocity = moveDirection * speed
+                  touchInput = touchPos - screenCenter
+                  local direction = Vector3.new(touchInput.X, 0, touchInput.Y)
+                  moveDirection = direction.Unit
                end
+
+               bodyVelocity.Velocity = moveDirection * speed
             end
-         end)
+         end
+
+         -- Connecting input handler
+         userInputService.InputChanged:Connect(handleInput)
+
       else
          flying = false
          if bodyVelocity then
