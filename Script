@@ -104,6 +104,12 @@ local Toggle = MiscTab:CreateToggle({
                      moveDirection = moveDirection + Camera.CFrame.RightVector
                   end
                   bodyVelocity.Velocity = moveDirection * speed
+               elseif input.UserInputType == Enum.UserInputType.Touch then
+                  local touchPos = input.Position
+                  local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                  local direction = (touchPos - screenCenter).Unit
+                  moveDirection = Vector3.new(direction.X, 0, direction.Y)
+                  bodyVelocity.Velocity = moveDirection * speed
                end
             end
          end)
