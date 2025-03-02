@@ -85,18 +85,18 @@ local Toggle = MiscTab:CreateToggle({
       if Fly then
          flying = true
          bodyVelocity = Instance.new("BodyVelocity")
-         bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)
-         bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+         bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000)  -- Add high force to move
+         bodyVelocity.Velocity = Vector3.new(0, 0, 0)  -- Initialize velocity
          bodyVelocity.Parent = RootPart
 
          local userInputService = game:GetService("UserInputService")
          local touchInput = Vector2.new(0, 0)
          
-         -- Keyboard and Touch input handler
          local function handleInput(input, gameProcessedEvent)
             if flying and not gameProcessedEvent then
                local moveDirection = Vector3.new(0, 0, 0)
 
+               -- Keyboard controls
                if input.UserInputType == Enum.UserInputType.Keyboard then
                   if input.KeyCode == Enum.KeyCode.W then
                      moveDirection = moveDirection + Camera.CFrame.LookVector
@@ -107,6 +107,7 @@ local Toggle = MiscTab:CreateToggle({
                   elseif input.KeyCode == Enum.KeyCode.D then
                      moveDirection = moveDirection + Camera.CFrame.RightVector
                   end
+               -- Mobile Touch controls
                elseif input.UserInputType == Enum.UserInputType.Touch then
                   local touchPos = input.Position
                   local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
@@ -115,7 +116,8 @@ local Toggle = MiscTab:CreateToggle({
                   moveDirection = direction.Unit
                end
 
-               bodyVelocity.Velocity = moveDirection * speed
+               -- Update the velocity (ensure it moves on the Y-axis as well)
+               bodyVelocity.Velocity = Vector3.new(moveDirection.X * speed, bodyVelocity.Velocity.Y, moveDirection.Z * speed)
             end
          end
 
